@@ -1485,7 +1485,6 @@ public class PlayerMock extends LivingEntityMock implements Player
 	public void hidePlayer(Plugin plugin, Player player)
 	{
 		Validate.notNull(player, "hidden player cannot be null");
-		Validate.isTrue(plugin.isEnabled(), "Plugin attempted to hide player while disabled");
 
 		hiddenPlayers.add(player);
 	}
@@ -1506,7 +1505,7 @@ public class PlayerMock extends LivingEntityMock implements Player
 	@Override
 	public boolean canSee(Player player)
 	{
-		return hiddenPlayers.contains(player);
+		return !hiddenPlayers.contains(player);
 	}
 
 	@Override
