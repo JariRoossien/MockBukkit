@@ -16,6 +16,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.function.Predicate;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.BanList;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
@@ -101,6 +102,10 @@ public class PlayerMock extends LivingEntityMock implements Player
 	private ItemStack cursor = null;
 	private long firstPlayed = 0;
 	private long lastPlayed = 0;
+	private final Set<Player> hiddenPlayers = new HashSet<>();
+
+	private boolean canFly;
+	private boolean isFlying;
 
 	private final List<AudioExperience> heardSounds = new LinkedList<>();
 
@@ -1460,66 +1465,64 @@ public class PlayerMock extends LivingEntityMock implements Player
 	@Override
 	public boolean getAllowFlight()
 	{
-		// TODO Auto-generated method stub
-		throw new UnimplementedOperationException();
+		return canFly;
 	}
 
 	@Override
 	public void setAllowFlight(boolean flight)
 	{
-		// TODO Auto-generated method stub
-		throw new UnimplementedOperationException();
+		this.canFly = flight;
 	}
 
 	@Override
 	@Deprecated
 	public void hidePlayer(Player player)
 	{
-		// TODO Auto-generated method stub
-		throw new UnimplementedOperationException();
+		hidePlayer(null, player);
 	}
 
 	@Override
 	public void hidePlayer(Plugin plugin, Player player)
 	{
-		// TODO Auto-generated method stub
-		throw new UnimplementedOperationException();
+		Validate.notNull(player, "hidden player cannot be null");
+		Validate.isTrue(plugin.isEnabled(), "Plugin attempted to hide player while disabled");
+
+		hiddenPlayers.add(player);
 	}
 
 	@Override
 	@Deprecated
 	public void showPlayer(Player player)
 	{
-		// TODO Auto-generated method stub
-		throw new UnimplementedOperationException();
+		hiddenPlayers.remove(player);
 	}
 
 	@Override
 	public void showPlayer(Plugin plugin, Player player)
 	{
-		// TODO Auto-generated method stub
-		throw new UnimplementedOperationException();
+		hiddenPlayers.remove(player);
 	}
 
 	@Override
 	public boolean canSee(Player player)
 	{
-		// TODO Auto-generated method stub
-		throw new UnimplementedOperationException();
+		return hiddenPlayers.contains(player);
 	}
 
 	@Override
 	public boolean isFlying()
 	{
-		// TODO Auto-generated method stub
-		throw new UnimplementedOperationException();
+		return isFlying;
 	}
 
 	@Override
 	public void setFlying(boolean value)
 	{
-		// TODO Auto-generated method stub
-		throw new UnimplementedOperationException();
+		if (!getAllowFlight() && value) {
+			throw new IllegalArgumentException("Cannot make player fly if getAllowFlight() is false");
+		}
+
+		isFlying = value;
 	}
 
 	@Override

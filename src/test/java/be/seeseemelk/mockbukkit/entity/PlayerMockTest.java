@@ -1003,4 +1003,29 @@ public class PlayerMockTest
 		player.setMaximumAir(-10);
 		assertEquals(-10, player.getMaximumAir());
 	}
+
+	@Test
+	public void testAllowFlight() {
+		player.setAllowFlight(true);
+		assertTrue(player.getAllowFlight());
+
+		player.setAllowFlight(false);
+		assertFalse(player.getAllowFlight());
+	}
+
+	@Test
+	public void testSetFlying() {
+		player.setAllowFlight(true);
+		player.setFlying(true);
+		assertTrue(player.isFlying());
+
+		player.setFlying(false);
+		assertFalse(player.isFlying());
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testPlayerCannotSetFlying() {
+		player.setAllowFlight(false);
+		player.setFlying(true);
+	}
 }
