@@ -42,9 +42,9 @@ artifacts {
     archives javadocJar, sourcesJar
 }
 
-signing {
-    sign publishing.publications
-}
+//signing {
+//    sign publishing.publications
+//}
 
 jacocoTestReport {
     reports {
@@ -112,3 +112,4 @@ publishing {
 
 eclipse.classpath.downloadJavadoc = true
 eclipse.classpath.downloadSources = true
+
